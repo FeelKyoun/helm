@@ -1,0 +1,21 @@
+#ex) pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc-2
+spec:
+  accessModes:
+    - ReadWriteOnce  #ReadWriteMany #ReadWriteOnce #ReadOnlyMany #ReadWriteOncePod pv와 일치
+  storageClassName: nfs-server #
+  resources:
+    requests:
+      storage: 30Gi  
+  volumeMode: Filesystem  # PV의 volumeMode와 동일하게 설정
+#  selector:              # (optional)pv labels 조건 추가
+#    matchLabels:
+#      #pvzone:private
+#    matchExpressions:
+#      - key: pvapp
+#        operator: 
+#        values:
+#          - ms

@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin
+  namespace: elk-stack  # 원하는 네임스페이스로 변경 가능
+  labels:
+    app: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin
+  template:
+    metadata:
+      labels:
+        app: zipkin
+    spec:
+      containers:
+      - name: zipkin
+        image: openzipkin/zipkin:latest
+        ports:
+        - containerPort: 9411
+        env:
+        - name: STORAGE_TYPE
+          value: elasticsearch
+        - name: ES_HOSTS
+          value: http://elasticsearch-master.elk-stack.svc:9200
+        - name: ES_INDEX
+          value: zipkin
+        # Elasticsearch 인증 정보 설정 (필요한 경우)
+        - name: ES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-master-credentials
+              key: username
+        - name: ES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-master-credentials
+              key: password
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+  namespace: elk-stack  # 원하는 네임스페이스로 변경 가능
+  labels:
+    app: zipkin
+spec:
+  type: NodePort  # 외부 접근을 원하지 않으면 ClusterIP로 설정
+  ports:
+  - port: 9411
+    targetPort: 9411
+    protocol: TCP
+    name: http
+  selector:
+    app: zipkin
