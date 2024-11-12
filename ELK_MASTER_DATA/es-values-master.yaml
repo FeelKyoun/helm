@@ -25,8 +25,6 @@ esConfig:
     cluster.name: "elasticsearch"
     node.name: ${HOSTNAME}
     network.host: 0.0.0.0
-    http.port: 9200
-    transport.port: 9300
 
     discovery.seed_hosts:
       - elasticsearch-master-0.elasticsearch-master-headless.elk-stack.svc.cluster.local
@@ -40,8 +38,6 @@ esConfig:
       - elasticsearch-master-1
       - elasticsearch-master-2
     xpack.security.enabled: true
-    xpack.security.http.ssl.enabled: true
-    xpack.security.transport.ssl.enabled: true
     xpack.monitoring.collection.enabled: true
 
 #  log4j2.properties: |
