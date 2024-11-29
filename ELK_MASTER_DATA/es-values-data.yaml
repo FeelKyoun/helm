@@ -28,7 +28,17 @@ esMajorVersion: ""
 # such as elasticsearch.yml and log4j2.properties
 esConfig:
   elasticsearch.yml: |
+    xpack.security.enabled: true
+    xpack.security.http.ssl.enabled: true
+    xpack.security.transport.ssl.enabled: true
     xpack.monitoring.collection.enabled: true
+    xpack.security.transport.ssl.verification_mode: certificate
+    xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/tls.key
+    xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/tls.crt
+    xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca.crt
+    xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/tls.key
+    xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/tls.crt
+    xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca.crt
 #  log4j2.properties: |
 #    key = value
 
@@ -47,27 +57,6 @@ extraEnvs:
       secretKeyRef:
         name: elasticsearch-master-credentials
         key: password
-  - name: xpack.security.enabled 
-    value: "true" 
-  - name: xpack.security.transport.ssl.enabled 
-    value: "true" 
-  - name: xpack.security.http.ssl.enabled
-    value: "true" 
-  - name: xpack.security.transport.ssl.verification_mode 
-    value: "certificate" 
-  - name: xpack.security.transport.ssl.key 
-    value: "/usr/share/elasticsearch/config/certs/tls.key" 
-  - name: xpack.security.transport.ssl.certificate 
-    value: "/usr/share/elasticsearch/config/certs/tls.crt" 
-  - name: xpack.security.transport.ssl.certificate_authorities 
-    value: "/usr/share/elasticsearch/config/certs/ca.crt" 
-  - name: xpack.security.http.ssl.key 
-    value: "/usr/share/elasticsearch/config/certs/tls.key" 
-  - name: xpack.security.http.ssl.certificate 
-    value: "/usr/share/elasticsearch/config/certs/tls.crt" 
-  - name: xpack.security.http.ssl.certificate_authorities 
-    value: "/usr/share/elasticsearch/config/certs/ca.crt"
-
 # Allows you to load environment variables from kubernetes secret or config map
 envFrom: []
 # - secretRef:
@@ -109,11 +98,11 @@ esJavaOpts: "" # example: "-Xmx1g -Xms1g"
 
 resources:
   requests:
-    cpu: "500m"
-    memory: "2Gi"
+    cpu: "1000m"
+    memory: "4Gi"
   limits:
-    cpu: "500m"
-    memory: "2Gi"
+    cpu: "1000m"
+    memory: "4Gi"
 
 initResources: {}
 # limits:
@@ -130,7 +119,7 @@ volumeClaimTemplate:
   storageClassName: nfs-server
   resources:
     requests:
-      storage: 30Gi
+      storage: 10Gi
 
 rbac:
   create: false
